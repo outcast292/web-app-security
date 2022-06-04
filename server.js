@@ -20,6 +20,6 @@ app.use('/commandes', commandeRoutes);
 // // client commande routes
 app.use('/clients', clientRoutes);
 // listen to server
-app.listen(3000, ()=>{
-    console.log("listenning at port 3000")
+app.listen(8080, ()=>{
+    console.log("listenning at port 8080")
 })
