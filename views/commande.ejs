@@ -20,7 +20,7 @@
     display: inline-block;
   }
 
-  input[type=submit] {
+  #display, input[type=submit] {
     background-color: #04AA6D;
     color: white;
     padding: 12px 20px;
@@ -32,7 +32,7 @@
 
   }
 
-  input[type=submit]:hover {
+  #display, input[type=submit]:hover {
     background-color: #45a049;
   }
 
@@ -63,7 +63,7 @@
 
   /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
   @media screen and (max-width: 600px) {
-    .col-25, .col-75, input[type=submit] {
+    .col-25, .col-75, #display, input[type=submit] {
       width: 100%;
       margin-top: 0;
     }
@@ -92,6 +92,9 @@
     color: white;
   }
 
+  #d {
+      display: none;
+    }
 
 
 </style>
@@ -101,7 +104,7 @@
 <h2>Gestion client</h2>
 
 <div class="container">
-  <form action="/action_page.php">
+  <form action="/commandes" method="post">
   <div class="row">
     <div class="col-75">
       <input type="text" id="codecommande" name="codecommande" placeholder="codecommande">
@@ -126,30 +129,45 @@
     <input type="submit" value="Enregistrer">
   </div>
   <div class="">
-    <input type="submit" value="Modifier" formaction="/URL2">
+    <input type="submit" value="Modifier" formaction="/commandes/modify">
   </div>
   <div class="">
-    <input type="submit" value="Supprimer" formaction="/URL2">
+    <input type="submit" value="Supprimer" formaction="/commandes/delete">
   </div>
   </form>
-  <form action="" method="get">
-    <div class="">
-      <input type="submit" value="Afficher">
-    </div>
-  </form>
+  <button type="submit" value="Afficher" id="display">Afficher</button>
 </div>
 
+<div id="d">
 <table id="customers">
   <tr>
     <th>code commande</th>
     <th>nom client</th>
     <th>code client</th>
+    <th>date</th>
   </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
+  <%result.forEach(client=>{%>
+    <tr>
+      <td><%= client.codecommande%></td>
+      <td><%= client.nomclient%></td>
+      <td><%= client.codeclient%></td>
+      <td><%= client.date%></th>
+    </tr>
+    <%})%>
 </table>
+</div>
 </body>
+
+
+<script>
+  const display = document.querySelector('#display')
+  display.addEventListener('click', () => {
+          if(getComputedStyle(d).display != "none"){
+            d.style.display = "none";
+          } else {
+            d.style.display = "block";
+          }
+        })
+</script>
+
 </html>

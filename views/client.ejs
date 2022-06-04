@@ -98,7 +98,7 @@
 <h2>Gestion client</h2>
 
 <div class="container">
-  <form method="get" action="/action_page.php">
+  <form method="post" action="/clients/search">
   <div class="row">
     <div class="col-75">
       <input type="text" id="nom" name="nom" placeholder="nom client">
@@ -110,17 +110,29 @@
   </form>
 </div>
 
+<% if(result){%>
 <table id="customers">
   <tr>
-    <th>code commande</th>
-    <th>nom client</th>
     <th>code client</th>
+    <th>prenom client</th>
+    <th>address</th>
+    <th>telephone</th>
+    <th>code commande</th>
+    <th>date</th>
   </tr>
   <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
+    <%result.forEach(client=>{%>
+      <tr>
+        <td><%= client.codeclient%></td>
+        <td><%= client.prenom%></td>
+        <td><%= client.address%></td>
+        <td><%= client.telephone%></th>
+        <td><%= client.codecommande%></th>
+        <td><%= client.date%></th>
+      </tr>
+      <%})%>
   </tr>
 </table>
+<% }%>
 </body>
 </html>

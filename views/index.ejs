@@ -22,7 +22,7 @@
       display: inline-block;
     }
 
-    input[type=submit] {
+    #display, input[type=submit] {
       background-color: #04AA6D;
       color: white;
       padding: 12px 20px;
@@ -34,7 +34,7 @@
 
     }
 
-    input[type=submit]:hover {
+    #display, input[type=submit]:hover {
       background-color: #45a049;
     }
 
@@ -63,11 +63,16 @@
       clear: both;
     }
 
+    #d {
+      display: none;
+    }
+
     /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
     @media screen and (max-width: 600px) {
 
       .col-25,
       .col-75,
+      #display,
       input[type=submit] {
         width: 100%;
         margin-top: 0;
@@ -139,59 +144,54 @@
         <input type="submit" value="Enregistrer">
       </div>
       <div class="">
-        <button class="put" data-doc="put">Modifier</button>
+        <input type="submit" formaction="/modify" value="Modifier">
       </div>
       <div class="">
-        <button class="delete" data-doc="delete">Supprimer</button>
+        <input type="submit" formaction="/delete" value="Supprimer">
       </div>
     </form>
-    <form action="/display" method="get">
-      <div class="">
-        <input type="submit" value="Afficher">
-      </div>
-    </form>
+      <button type="submit" value="Afficher" id="display">Afficher</button>
+
   </div>
 
-  <table id="customers">
-    <tr>
-      <th>code</th>
-      <th>nom</th>
-      <th>prenom</th>
-      <th>adress</th>
-      <th>telephone</th>
-    </tr>
-    <tr>
-      <td>Alfreds Futterkiste</td>
-      <td>Maria Anders</td>
-      <td>Germany</td>
-      <td>Contact</th>
-      <td>Country</th>
-    </tr>
-  </table>
+  <div id="d">
 
 
-  <script>
-    const del = document.querySelector('.delete');
-    del.addEventListener('click', (e) => {
-      const endpoint = `/delete/${req.body.nom}`;
-      fetch(endpoint, {
-        method: 'DELETE',
-      })
-        .then(response => response.json())
-        .then(data => window.location.href = data.redirect)
-        .catch(err => console.log(err));
-    });
-    const put = document.querySelector('.put');
-    put.addEventListener('click', (e) => {
-      const endpoint = `/modify/${req.body.nom}`;
-      fetch(endpoint, {
-        method: 'PUT',
-      })
-        .then(response => response.json())
-        .then(data => window.location.href = data.redirect)
-        .catch(err => console.log(err));
-    });
-  </script>
+      <div id="customers">
+          <h3 class="notfound">No data to show!</h3>
+      </div>
+
+      <table id="customers">
+        <tr>
+          <th>code</th>
+          <th>nom</th>
+          <th>prenom</th>
+          <th>adress</th>
+          <th>telephone</th>
+        </tr>
+        <%result.forEach(client=>{%>
+          <tr>
+            <td><%= client.code%></td>
+            <td><%= client.nom%></td>
+            <td><%= client.prenom%></td>
+            <td><%= client.address%></th>
+            <td><%= client.telephone%></th>
+          </tr>
+          <%})%>
+      </table>
+  </div>
+
 </body>
+
+<script>
+  const display = document.querySelector('#display')
+  display.addEventListener('click', () => {
+          if(getComputedStyle(d).display != "none"){
+            d.style.display = "none";
+          } else {
+            d.style.display = "block";
+          }
+        })
+</script>
 
 </html>
