@@ -8,12 +8,12 @@ const db = mysql.createConnection({
     database: "bohojaiuimzrml7fwjmt",
 });
 
-router.get('/', (req, res)=>{
+router.get('/', (req, res) => {
     db.query("SELECT * FROM commandes", (err, result) => {
         if (err) {
             console.log(err);
         } else {
-            res.render('commande', {result});
+            res.render('commande', { result });
             console.log(result);
         }
     });
