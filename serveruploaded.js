@@ -2,8 +2,8 @@ const http = require('http');
 const url = require('url');
 const { exec } = require('child_process');
 
-const host = '0.0.0.0';
-const port = 3000;
+
+const port = 8080;
 
 const server = http.createServer((req, res) => {
   const query = url.parse(req.url, true).query;
