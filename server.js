@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 // imports for command execution vulnerability
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 const pug = require('pug');
 // routes
 const commandeRoutes = require('./routes/commandeRoutes');
@@ -27,24 +27,30 @@ app.use('/clients', clientRoutes);
 app.use('/commandexecution', (req, res) => {
     const folder = req.query.folder;
     if (folder) {
-      // Run the command with the parameter the user gives us
-      exec(`ls ${folder}`, (error, stdout, stderr) => {
-        let output = stdout;
-        if (error) {
-          // If there are any errors, show that
-          output = error;
+        // Check for possible inserted special characters
+        var format = /[ `!@#$%^&*()_+\-=\[\]{};':"|,.<>?~]+/;
+        if (format.test(folder)) {
+            res.send('cannnot execute this commande! Enter a valid folder')
+        } else {
+            // Run the command with the parameter the user gives us
+            exec(`ls -l ${folder}`, (error, stdout, stderr) => {
+                let output = stdout;
+                if (error) {
+                    // If there are any errors, show that
+                    output = error;
+                }
+                res.send(
+                    pug.renderFile('./views/commandexecution.pug', { output: output, folder: folder })
+                );
+            });
         }
-        res.send(
-          pug.renderFile('./views/commandexecution.pug', {output: output, folder: folder})
-        );
-      });
     } else {
-      res.send(pug.renderFile('./views/commandexecution.pug', {}));
+        res.send(pug.renderFile('./views/commandexecution.pug', {}));
     }
 
-  });
+});
 
 // listen to server
-app.listen(8080, ()=>{
+app.listen(8080, () => {
     console.log("listenning at port 8080")
 })
