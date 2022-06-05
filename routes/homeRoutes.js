@@ -10,14 +10,38 @@ const db = mysql.createConnection({
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "./images/");
+        cb(null, "./images/");
     },
     filename: (req, file, cb) => {
-      cb(null, file.originalname);
+        cb(null, Date.now() + "--" +file.originalname);
     },
-  });
+});
 
-const upload = multer({ storage: storage }); //multer : midlleware for uploading files
+const upload = multer({
+    storage: storage,
+    fileFilter: function (_req, file, cb) {
+        checkFileType(file, cb);
+    }
+}); //multer : midlleware for uploading files
+
+function checkFileType(file, cb) {
+    // Allowed ext
+    const filetypes = /jpeg|jpg|png|gif/;
+    // Check ext
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
+    const mimetype = filetypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+        return cb(null, true);
+    } else {
+        cb('Error: Images Only!');
+    }
+}
+
+
+
+
 
 router.get('/', (req, res) => {
     db.query("SELECT * FROM clients", (err, result) => {
@@ -29,7 +53,7 @@ router.get('/', (req, res) => {
         }
     });
 })
-router.post('/',upload.single("file"), (req, res) => {
+router.post('/', upload.single("file"), (req, res) => {
 
     const code = req.body.code;
     const nom = req.body.nom;
