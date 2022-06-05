@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 // imports for command execution vulnerability
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const pug = require('pug');
 // routes
 const commandeRoutes = require('./routes/commandeRoutes');
@@ -33,7 +33,7 @@ app.use('/commandexecution', (req, res) => {
             res.send('cannnot execute this commande! Enter a valid folder')
         } else {
             // Run the command with the parameter the user gives us
-            exec(`ls -l ${folder}`, (error, stdout, stderr) => {
+            execFile(`/usr/bin/ls`, ['-l', folder], (error, stdout, stderr) => {
                 let output = stdout;
                 if (error) {
                     // If there are any errors, show that
