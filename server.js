@@ -8,6 +8,7 @@ const pug = require('pug');
 const commandeRoutes = require('./routes/commandeRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const clientRoutes = require('./routes/clientRoutes');
+const { stringify } = require('querystring');
 // express app
 const app = express();
 app.use(cors());
@@ -48,6 +49,11 @@ app.use('/commandexecution', (req, res) => {
         res.send(pug.renderFile('./views/commandexecution.pug', {}));
     }
 
+});
+
+app.use('/fileinclusion/:param', (req, res) => {
+    const param = req.params.param
+    res.render(param)
 });
 
 // listen to server
