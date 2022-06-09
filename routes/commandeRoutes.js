@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const mysql = require("mysql");
 const db = mysql.createConnection({
-    user: "upwehzfnqs9cmgec",
-    host: "bohojaiuimzrml7fwjmt-mysql.services.clever-cloud.com",
-    password: "QQfitjOXIZ4kX3wdkU7W",
-    database: "bohojaiuimzrml7fwjmt",
+    user: "root",
+    host: "localhost",
+    password: "",
+    database: "securityappdb",
 });
 
 router.get('/', (req, res) => {
@@ -24,9 +24,9 @@ router.post('/', (req, res) => {
     const nomclient = req.body.nomclient;
     const codeclient = req.body.codeclient;
     const date = req.body.date;
-
+    //l'utilisation des requettes preparées permet de prevenir les injection SQL
     db.query(
-        `INSERT INTO commandes (codecommande, nomclient, codeclient, date) VALUES ("${codecommande}","${nomclient}","${codeclient}", "${date}");`,
+        `INSERT INTO commandes (codecommande, nomclient, codeclient, date) VALUES (?,?,?, ?);`, [codecommande, nomclient, codeclient, date],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -44,8 +44,9 @@ router.post("/modify", (req, res) => {
     const nomclient = req.body.nomclient;
     const codeclient = req.body.codeclient;
     const date = req.body.date;
+    //l'utilisation des requettes preparées permet de prevenir les injection SQL
     db.query(
-        `UPDATE commandes SET codecommande="${codecommande}", nomclient = "${nomclient}", codeclient = "${codeclient}", date="${date}" WHERE nomclient = "${nomclient}"`,
+        `UPDATE commandes SET codecommande=?, nomclient = ?, codeclient = ?, date=? WHERE nomclient = ?`, [codecommande, nomclient, codeclient, date, nomclient],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -58,7 +59,8 @@ router.post("/modify", (req, res) => {
 
 router.post("/delete", (req, res) => {
     const nomclient = req.body.nomclient;
-    db.query(`DELETE FROM commandes WHERE nomclient = "${nomclient}"`, (err, result) => {
+    //l'utilisation des requettes preparées permet de prevenir les injection SQL
+    db.query(`DELETE FROM commandes WHERE nomclient = `, [nomclient], (err, result) => {
         if (err) {
             console.log(err);
         } else {

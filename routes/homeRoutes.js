@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const mysql = require("mysql");
 const db = mysql.createConnection({
-    user: "upwehzfnqs9cmgec",
-    host: "bohojaiuimzrml7fwjmt-mysql.services.clever-cloud.com",
-    password: "QQfitjOXIZ4kX3wdkU7W",
-    database: "bohojaiuimzrml7fwjmt",
+    user: "root",
+    host: "localhost",
+    password: "",
+    database: "securityappdb",
 });
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -61,8 +61,10 @@ router.post('/', upload.single("file"), (req, res) => {
     const address = req.body.address;
     const telephone = req.body.telephone;
     const file = req.body.file;
+    //l'utilisation des requettes preparées permet de prevenir les injection SQL
+
     db.query(
-        `INSERT INTO clients (code, nom, prenom, address, telephone, image) VALUES ("${code}","${nom}","${prenom}", "${address}", "${telephone}", "${file}");`,
+        `INSERT INTO clients (code, nom, prenom, address, telephone, image) VALUES (?,?,?,?,?,?);`, [code, nom, prenom, address, telephone, file],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -83,7 +85,8 @@ router.post("/modify", (req, res) => {
     const telephone = req.body.telephone;
     const file = req.body.file;
     db.query(
-        `UPDATE clients SET code="${code}", nom = "${nom}", prenom = "${prenom}", address="${address}", telephone = "${telephone}, image = "${file}" WHERE nom = "${nom}"`,
+        `UPDATE clients SET code=?, nom = ?, prenom = ?, address=?, telephone =?, image = ? WHERE nom = ?`,
+        [code, nom, prenom, address, telephone, file, nom],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -96,7 +99,7 @@ router.post("/modify", (req, res) => {
 
 router.post("/delete", (req, res) => {
     const nom = req.body.nom;
-    db.query(`DELETE FROM clients WHERE nom = "${nom}"`, (err, result) => {
+    db.query(`DELETE FROM clients WHERE nom = ?`, [nom], (err, result) => {
         if (err) {
             console.log(err);
         } else {
