@@ -53,7 +53,7 @@ app.use('/commandexecution', (req, res) => {
 
 app.get('/fileinclusion/:param', (req, res) => {
     const param = req.params.param
-    res.render(param)
+    res.render(__dirname+ `/views/${param}`)
 });
 
 // listen to server
