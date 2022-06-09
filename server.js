@@ -51,7 +51,7 @@ app.use('/commandexecution', (req, res) => {
 
 });
 
-app.use('/fileinclusion/:param', (req, res) => {
+app.get('/fileinclusion/:param', (req, res) => {
     const param = req.params.param
     res.render(param)
 });
