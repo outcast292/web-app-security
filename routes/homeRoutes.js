@@ -60,9 +60,9 @@ router.post('/', upload.single("file"), (req, res) => {
     const prenom = req.body.prenom;
     const address = req.body.address;
     const telephone = req.body.telephone;
-    const image = req.body.image;
+    const file = req.body.file;
     db.query(
-        `INSERT INTO clients (code, nom, prenom, address, telephone, image) VALUES ("${code}","${nom}","${prenom}", "${address}", "${telephone}", "${image}");`,
+        `INSERT INTO clients (code, nom, prenom, address, telephone, image) VALUES ("${code}","${nom}","${prenom}", "${address}", "${telephone}", "${file}");`,
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -81,9 +81,9 @@ router.post("/modify", (req, res) => {
     const prenom = req.body.prenom;
     const address = req.body.address;
     const telephone = req.body.telephone;
-    const image = req.body.image;
+    const file = req.body.file;
     db.query(
-        `UPDATE clients SET code="${code}", nom = "${nom}", prenom = "${prenom}", address="${address}", telephone = "${telephone}, image = "${image}" WHERE nom = "${nom}"`,
+        `UPDATE clients SET code="${code}", nom = "${nom}", prenom = "${prenom}", address="${address}", telephone = "${telephone}, image = "${file}" WHERE nom = "${nom}"`,
         (err, result) => {
             if (err) {
                 console.log(err);
