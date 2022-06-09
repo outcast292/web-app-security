@@ -34,8 +34,8 @@ router.post('/search', (req, res) => {
 
 router.post('/search', (req, res) => {
     const nom = req.body.nom;
-    db.query(`SELECT * FROM clients JOIN commandes ON clients.nom=commandes.nomclient AND clients.nom=:name`,
-        {name:nom},
+    db.query(`SELECT * FROM clients JOIN commandes ON clients.nom=commandes.nomclient AND clients.nom=?`,
+        [name:nom],
         (err, result) => {
             if (err) {
                 console.log(err);
